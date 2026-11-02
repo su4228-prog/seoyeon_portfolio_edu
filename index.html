@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>고서연 포트폴리오</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    :root {
+      --or:#F26A1B; --or-dark:#D9560C; --or-soft:#FFF4EC; --or-line:#FFDCC6;
+      --ink:#111111; --text:#222; --sub:#5f6063; --mute:#9b9b9b; --line:#F5F5F3; --soft:#FAFAF8;
+    }
+    body { font-family:"Pretendard","Noto Sans KR",Arial,sans-serif; background:#fff; color:var(--text); line-height:1.65; -webkit-font-smoothing:antialiased; }
+    a { color:inherit; text-decoration:none; }
+    img { display:block; max-width:100%; }
+    button { font-family:inherit; }
+
+    .layout { display:grid; grid-template-columns: 236px minmax(0,1fr); min-height:100vh; }
+    .sidebar { position:fixed; top:0; left:0; width:236px; height:100vh; background:#fff; border-right:1px solid var(--line); padding:34px 22px; display:flex; flex-direction:column; z-index:1000; }
+    .side-logo { font-size:20px; font-weight:950; letter-spacing:-.8px; color:var(--ink); line-height:1.25; margin-bottom:42px; display:inline-block; white-space:nowrap; }
+    .side-logo i { font-weight:950; }
+    .side-logo i { font-style:normal; color:var(--or); }
+    .side-nav { list-style:none; display:grid; gap:4px; }
+    .side-nav a { white-space:nowrap; letter-spacing:-.3px; color:#555 !important; display:flex; gap:8px; align-items:baseline; padding:10px 10px; border-radius:10px; font-size:13.5px; font-weight:800; color:#555; transition:background .15s,color .15s; word-break:keep-all; line-height:1.35; }
+    .side-nav a .n { font-size:12px; font-weight:900; color:#bdbdbd; flex:none; }
+    .side-nav a:hover { background:var(--soft); color:var(--ink) !important; }
+    .side-nav a.active { background:var(--or-soft); color:var(--or-dark) !important; }
+    .side-nav a.active .n { color:var(--or); }
+    .main { grid-column:2; min-width:0; }
+
+    .section { padding:0 64px 84px; border-bottom:1px solid var(--line); }
+    .section-inner { max-width:1440px; margin:0 auto; }
+    .uline { display:block; width:34px; height:3px; border-radius:3px; background:var(--or); margin-top:8px; }
+
+    /* ---------- About (100% 화면 한 장) ---------- */
+    .about { min-height:100vh; padding:0 64px 24px; }
+    .about .section-inner { width:100%; }
+    .kicker { font-size:12px; font-weight:900; letter-spacing:3px; color:var(--or); margin-bottom:10px; }
+    .about-top { margin-bottom:14px; padding:34px 0 30px; background:#F5F5F3; box-shadow:0 0 0 100vmax #F5F5F3; clip-path:inset(0 -100vmax); }
+    .hero { display:flex; gap:28px; align-items:center; }
+    .hero-photo { width:96px; height:120px; border-radius:14px; overflow:hidden; flex:none; background:#fff; box-shadow:0 10px 24px rgba(0,0,0,.08); }
+    .hero-photo img { width:100%; height:100%; object-fit:cover; }
+    .hi { font-size:16px; font-weight:800; color:var(--ink); }
+    .hero h1 { white-space:nowrap; font-size:clamp(32px,3vw,46px); font-weight:950; letter-spacing:-2px; line-height:1.08; color:var(--ink); margin:0 0 14px; }
+    .hero h1 span { color:var(--or); }
+    .role { font-size:15px; font-weight:800; color:#4a4a4a; margin-bottom:10px; }
+    .copy { white-space:nowrap; font-size:15.5px; color:var(--sub); line-height:1.75; word-break:keep-all; }
+    .facts { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0; border-bottom:1px solid var(--line); margin-bottom:28px; }
+    .fact { padding:12px 20px; border-left:1px solid var(--line); }
+    .fact:first-child { border-left:0; padding-left:0; }
+    .fact dt { font-size:11.5px; font-weight:900; letter-spacing:2px; color:var(--mute); margin-bottom:4px; }
+    .fact dd { font-size:14px; font-weight:800; color:var(--ink); line-height:1.5; word-break:keep-all; }
+    .fact dd small { display:block; font-size:12.5px; font-weight:600; color:var(--sub); }
+    .fact dd a:hover { color:var(--or); }
+    .block-title { font-size:18px; font-weight:950; color:var(--ink); letter-spacing:-.4px; margin-bottom:10px; }
+    .block-title .uline { margin-top:6px; }
+    .exp-line { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); position:relative; margin-bottom:62px; }
+    .exp-line::before { content:""; position:absolute; left:8px; right:8px; top:7px; border-top:2px dashed var(--or-line); }
+    .exp-item { position:relative; padding:24px 10px 0 0; }
+    .exp-item::before { content:""; position:absolute; left:0; top:0; width:16px; height:16px; border-radius:50%; background:#fff; border:3px solid var(--or-line); }
+    .exp-item.now::before { background:var(--or); border-color:var(--or); box-shadow:0 0 0 5px var(--or-soft); }
+    .exp-item .when { font-size:12.5px; font-weight:900; color:var(--or); }
+    .exp-item b { display:block; font-size:16px; font-weight:950; color:var(--ink); margin-top:2px; }
+    .exp-item span { display:block; font-size:13px; color:var(--sub); font-weight:700; word-break:keep-all; }
+    .about-bottom { display:grid; grid-template-columns: minmax(0,.9fr) minmax(0,1.5fr); gap:40px; }
+    .awards { display:grid; gap:8px; }
+    .award { display:grid; grid-template-columns:34px minmax(0,1fr) auto; gap:12px; align-items:center; }
+    .award .ic { width:34px; height:34px; border-radius:50%; background:var(--or-soft); display:flex; align-items:center; justify-content:center; font-size:16px; }
+    .award b { font-size:14px; font-weight:900; color:var(--ink); }
+    .award span { font-size:13px; color:var(--sub); font-weight:600; word-break:keep-all; }
+    .award small { font-size:12px; color:var(--mute); font-weight:700; white-space:nowrap; }
+    .skills { display:grid; gap:0; }
+    .skill { display:grid; grid-template-columns:140px minmax(0,1fr); gap:12px; align-items:center; padding:6px 0; border-bottom:1px solid var(--line); }
+    .skill:first-child { padding-top:0; } .skill:last-child { border-bottom:0; }
+    .skill h4 { font-size:11.5px; font-weight:950; letter-spacing:1px; white-space:nowrap; color:var(--ink); }
+    .chips { display:flex; flex-wrap:wrap; gap:5px; }
+    .chip { font-size:12px; font-weight:800; color:#444; padding:3px 9px; border-radius:999px; background:var(--soft); border:1px solid var(--line); }
+    .chip.pt { color:var(--or-dark); background:var(--or-soft); border-color:var(--or-line); }
+
+    /* ---------- 역량 머리 ---------- */
+    .cat-head { display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap; padding:38px 0; margin-bottom:40px; background:#F5F5F3; box-shadow:0 0 0 100vmax #F5F5F3; clip-path:inset(0 -100vmax); }
+    .cat-left { display:flex; align-items:flex-end; gap:20px; }
+    .cat-no { font-size:64px; font-weight:950; line-height:.9; color:var(--or); letter-spacing:-3px; }
+    .cat-kicker { font-size:11.5px; font-weight:900; letter-spacing:2.5px; color:var(--mute); }
+    .cat-head h2 .cno { color:var(--or); margin-right:4px; }
+    .cat-head h2 { font-size:clamp(26px,2.3vw,34px); font-weight:950; color:var(--ink); letter-spacing:-1px; line-height:1.2; }
+    .cat-head p { font-size:14.5px; color:var(--sub); margin-top:2px; }
+    .cat-tags { display:flex; flex-wrap:wrap; gap:6px; }
+    .cat-tags span { padding:6px 14px; border-radius:999px; border:0; background:var(--or); color:#fff !important; color:var(--or-dark); font-size:12.5px; font-weight:800; }
+
+    /* ---------- 프로젝트 ---------- */
+    .project + .project { margin-top:84px; padding-top:84px; border-top:1px dashed #CFCFCF; }
+    .p-layout { display:grid; grid-template-columns: minmax(340px,.82fr) minmax(0,1.18fr); gap:48px; align-items:center; }
+    .p-meta { font-size:13px; font-weight:800; color:var(--or); margin-bottom:6px; }
+    .p-title { word-break:keep-all; font-size:clamp(28px,2.4vw,36px); font-weight:950; color:var(--ink); letter-spacing:-1.2px; line-height:1.2; }
+    .p-sub { font-size:15px; font-weight:800; color:#4a4a4a; margin-top:4px; }
+    .p-stack { font-size:13px; font-weight:700; color:var(--mute); margin-top:6px; }
+    .p-summary { font-size:15px; line-height:1.7; color:var(--sub); margin:14px 0 18px; word-break:keep-all; }
+    .p-summary b { color:var(--ink); }
+    .stats { display:flex; margin-bottom:18px; }
+    .stat { flex:1; min-width:0; padding:0 18px; border-left:1px solid var(--line); }
+    .stat:first-child { padding-left:0; border-left:0; }
+    .stat b { display:block; font-size:clamp(22px,1.9vw,28px); font-weight:950; color:var(--or); letter-spacing:-1px; line-height:1.15; white-space:nowrap; }
+    .stat span { display:block; font-size:13px; font-weight:800; color:#444; margin-top:4px; word-break:keep-all; line-height:1.4; }
+    .nw { white-space:nowrap; }
+    .stat span.nw { display:inline; margin:0; }
+    .stat-note { font-size:12.5px; color:var(--mute); font-weight:600; margin:-12px 0 20px; }
+    .label { font-size:11.5px; font-weight:950; letter-spacing:2px; color:var(--ink); margin-bottom:10px; }
+    .list { list-style:none; display:grid; gap:5px; margin-bottom:18px; }
+    .list li { position:relative; padding-left:18px; font-size:14.5px; color:#333; line-height:1.6; word-break:keep-all; }
+    .list li::before { content:""; position:absolute; left:2px; top:10px; width:6px; height:6px; border-radius:50%; background:var(--or); }
+    .list li b { color:var(--ink); }
+    .list.results li em { font-style:normal; font-weight:900; color:var(--or-dark); }
+    .meta-line { font-size:13px; color:var(--mute); font-weight:700; margin:-8px 0 22px; }
+    .actions { display:flex; flex-wrap:wrap; gap:10px; }
+    .btn { display:inline-flex; align-items:center; gap:6px; min-height:44px; padding:0 18px; border-radius:10px; font-size:14px; font-weight:900; border:1.5px solid var(--ink); color:var(--ink); background:#fff; cursor:pointer; transition:transform .15s, background .15s; }
+    .btn:hover { transform:translateY(-2px); }
+    .btn.primary { background:var(--or); border-color:var(--or); color:#fff; }
+    .btn.primary:hover { background:var(--or-dark); }
+
+    /* 화면 프레임 */
+    .browser-frame { background:#fff; border:1px solid var(--line); border-radius:16px; overflow:hidden; box-shadow:0 20px 44px rgba(0,0,0,.08); }
+    .browser-top { height:34px; display:flex; align-items:center; gap:7px; padding:0 14px; background:#fafafa; border-bottom:1px solid var(--line); }
+    .dot { width:10px; height:10px; border-radius:50%; background:#e2e2e2; }
+    .dot.red { background:#ff8b6a; } .dot.yellow { background:#ffc861; } .dot.green { background:#7fd18b; }
+    .project-screen { position:relative; aspect-ratio:var(--ratio,1.78); background:#fff; }
+    .pane { display:none; width:100%; height:100%; }
+    .pane.active { display:flex; }
+    .pane-img { align-items:center; justify-content:center; }
+    .pane-img img { width:100%; height:100%; object-fit:contain; cursor:zoom-in; }
+    .screen-tabs { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:16px; }
+    .screen-tab { min-height:36px; padding:0 15px; border-radius:999px; border:1px solid var(--line); background:#fff; color:#555; font-size:13px; font-weight:800; cursor:pointer; transition:all .15s; }
+    .screen-tab:hover { border-color:var(--or-line); color:var(--or-dark); }
+    .screen-tab.active { background:var(--or); border-color:var(--or); color:#fff; }
+
+    .flowline { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:4px 8px; margin-top:18px; font-size:12.5px; color:#a6a6a6; font-weight:600; }
+    .flowline .fl-label { font-size:10px; letter-spacing:2px; font-weight:900; color:#c8c8c8; margin-right:4px; }
+    .flowline .sep { color:#d2d2d2; }
+
+    /* 문서 */
+    .doc-pages { display:grid; grid-template-columns:repeat(var(--n,3),minmax(0,1fr)); gap:16px; align-items:start; }
+    .page-btn { display:block; padding:0; border:0; background:none; cursor:zoom-in; }
+    .page-btn img { width:100%; height:auto; border-radius:4px; background:#fff; box-shadow:0 12px 28px rgba(0,0,0,.12); transition:transform .2s; }
+    .page-btn:hover img { transform:translateY(-4px); }
+    .wide-block { margin-top:56px; background:var(--or-soft); border-radius:20px; padding:28px 30px 22px; }
+    .wide-head { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap; }
+    .wide-head h3 { font-size:22px; font-weight:950; color:var(--ink); letter-spacing:-.6px; }
+    .wide-head h3 .uline { margin-top:6px; }
+    .page-strip { display:grid; grid-auto-flow:column; grid-auto-columns:200px; gap:14px; overflow-x:auto; padding:4px 2px 14px; scrollbar-width:thin; }
+    .page-strip .page-btn img { aspect-ratio:16/9; object-fit:cover; border:1px solid var(--or-line); background:#fff; box-shadow:none; border-radius:8px; }
+
+    /* 건국 */
+    .kk-grid { display:grid; grid-template-columns:1.45fr 1fr; gap:14px; }
+    .kk-col { display:flex; flex-direction:column; gap:14px; }
+    .kk-card { border:1px solid var(--line); border-radius:14px; overflow:hidden; display:flex; flex-direction:column; background:#fff; box-shadow:0 12px 28px rgba(0,0,0,.06); }
+    .kk-cap { padding:10px 14px; font-size:13px; font-weight:900; color:var(--ink); border-top:1px solid var(--line); }
+    .kk-map { flex:1; display:flex; align-items:center; padding:6px; }
+    .kk-map img { width:100%; height:auto; cursor:zoom-in; }
+    .kk-video { position:relative; display:block; aspect-ratio:16/9; background:#111; }
+    .kk-video img { width:100%; height:100%; object-fit:cover; color:transparent; }
+    .kk-pages { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; padding:12px; background:var(--soft); flex:1; align-items:center; }
+    .kk-pages .page-btn img { box-shadow:0 6px 14px rgba(0,0,0,.1); }
+
+    /* 영상 카드 */
+    .play { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:48px; height:48px; border-radius:50%; background:rgba(242,106,27,.95); color:#fff; display:flex; align-items:center; justify-content:center; font-size:16px; padding-left:3px; box-shadow:0 8px 18px rgba(0,0,0,.25); }
+    .vcard { display:flex; flex-direction:column; min-width:0; background:#fff; border:1px solid var(--line); border-radius:14px; overflow:hidden; transition:transform .15s, box-shadow .15s; }
+    .vcard:hover { transform:translateY(-3px); box-shadow:0 14px 28px rgba(0,0,0,.1); }
+    .vthumb { position:relative; aspect-ratio:16/9; background:#111; overflow:hidden; }
+    .vcard.short .vthumb { aspect-ratio:9/16; }
+    .vthumb img { width:100%; height:100%; object-fit:cover; color:transparent; }
+    .vthumb .badge { position:absolute; left:8px; top:8px; padding:3px 8px; border-radius:6px; background:var(--or); color:#fff; font-size:11px; font-weight:900; }
+    .vthumb .len { position:absolute; right:8px; bottom:8px; padding:2px 6px; border-radius:4px; background:rgba(0,0,0,.75); color:#fff; font-size:11px; }
+    .vbody { padding:10px 12px 12px; }
+    .vbody p { font-size:13px; font-weight:800; color:var(--ink); line-height:1.45; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; word-break:keep-all; }
+    .vbody small { display:block; margin-top:4px; font-size:12px; color:var(--mute); }
+    .vbody small strong { color:var(--or-dark); }
+    .shorts-row { display:grid; grid-template-columns:repeat(var(--n,4),minmax(0,1fr)); gap:14px; }
+    .long-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; }
+
+    /* IMC */
+    .imc-top { display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; margin-bottom:26px; }
+    .imc-top .stats { margin-bottom:0; min-width:440px; }
+    .ad-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; }
+    .ad-card { display:flex; flex-direction:column; border:1px solid var(--line); border-radius:16px; overflow:hidden; background:#fff; transition:transform .15s, box-shadow .15s; }
+    .ad-card:hover { transform:translateY(-3px); box-shadow:0 18px 34px rgba(0,0,0,.1); }
+    .ad-thumb { position:relative; aspect-ratio:16/9; background:#111; overflow:hidden; }
+    .ad-thumb img { width:100%; height:100%; object-fit:cover; color:transparent; }
+    .award-badge { position:absolute; left:10px; top:10px; right:10px; width:max-content; max-width:calc(100% - 20px); display:flex; align-items:center; gap:7px; background:#fff; border-radius:999px; padding:4px 12px 4px 4px; box-shadow:0 6px 16px rgba(0,0,0,.18); }
+    .medal { flex:none; width:28px; height:28px; font-size:14px !important; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; background:var(--or-soft); }
+    .award-badge b { display:block; font-size:13px; font-weight:950; color:var(--ink); line-height:1.15; }
+    .award-badge small { display:block; font-size:10.5px; color:var(--mute); font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .ad-body { padding:14px 16px 16px; }
+    .ad-contest { font-size:12px; font-weight:800; color:var(--or-dark); margin-bottom:4px; word-break:keep-all; line-height:1.4; }
+    .roles { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
+    .roles span { padding:4px 10px; border-radius:6px; background:var(--ink); color:#fff; font-size:12px; font-weight:900; }
+    .roles span.lite { background:var(--or-soft); color:var(--or-dark); }
+    .ad-body h4 { font-size:16px; font-weight:950; color:var(--ink); letter-spacing:-.5px; margin-bottom:8px; }
+    .ad-body p { font-size:13px; color:var(--sub); line-height:1.6; word-break:keep-all; }
+
+    .footer { grid-column:2; background:#F5F5F3; padding:28px 64px; text-align:center; font-size:13px; color:var(--mute); }
+
+    /* 라이트박스 / 문서 뷰어 */
+    .lb { position:fixed; inset:0; z-index:3000; background:rgba(15,15,15,.92); display:none; }
+    .lb.open { display:flex; flex-direction:column; }
+    .lb-top { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:12px 18px; color:#fff; font-size:14px; font-weight:800; }
+    .lb-top .lb-title { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .lb-btns { display:flex; gap:8px; flex:none; }
+    .lb-btn { min-height:36px; padding:0 14px; border-radius:8px; border:1px solid rgba(255,255,255,.3); background:transparent; color:#fff; font-size:13px; font-weight:900; cursor:pointer; display:inline-flex; align-items:center; }
+    .lb-stage { flex:1; min-height:0; display:flex; align-items:center; justify-content:center; padding:0 64px 24px; position:relative; }
+    .lb-stage img { max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; background:#fff; border-radius:6px; }
+    .lb-nav { position:absolute; top:50%; transform:translateY(-50%); width:44px; height:44px; border-radius:50%; border:0; background:rgba(255,255,255,.16); color:#fff; font-size:20px; cursor:pointer; }
+    .lb-prev { left:12px; } .lb-next { right:12px; }
+    .lb-cap { text-align:center; color:#cfcfcf; font-size:13px; padding:0 20px 16px; }
+    .dv-pages { flex:1; min-height:0; overflow-y:auto; padding:4px 18px 40px; display:flex; flex-direction:column; align-items:center; gap:18px; }
+    .dv-pages img { width:min(1100px,100%); height:auto; background:#fff; border-radius:4px; }
+    .dv-pages .pno { color:#8f8f8f; font-size:12px; font-weight:800; margin-top:-10px; }
+    body.noscroll { overflow:hidden; }
+
+    @media (max-width:1280px) {
+      .section, .about { padding-left:44px; padding-right:44px; }
+    }
+    @media (max-width:1180px) {
+      .layout { display:block; }
+      .sidebar { background:#fff; position:sticky; width:100%; height:auto; flex-direction:row; align-items:center; gap:16px; padding:12px 18px; border-right:0; border-bottom:1px solid var(--line); }
+      .side-logo { margin:0; font-size:17px; }
+      .side-nav { display:flex; overflow-x:auto; scrollbar-width:none; }
+      .side-nav a { white-space:nowrap; padding:8px 12px; }
+      .main, .footer { grid-column:auto; }
+      .about { min-height:0; }
+      .about-bottom, .p-layout { grid-template-columns:1fr; gap:32px; }
+      .copy { white-space:normal; }
+      .facts { grid-template-columns:1fr; }
+      .fact { border-left:0; padding:12px 0; border-top:1px solid var(--line); }
+      .imc-top .stats { min-width:0; width:100%; }
+      .ad-grid { grid-template-columns:1fr 1fr; }
+      .long-grid { grid-template-columns:1fr 1fr; }
+    }
+    @media (max-width:768px) {
+      .section, .about { padding:0 18px 56px; }
+      .hero { flex-direction:column; align-items:flex-start; }
+      .exp-line { grid-template-columns:1fr 1fr; row-gap:22px; }
+      .exp-line::before { display:none; }
+      .skill { grid-template-columns:1fr; gap:6px; }
+      .award { grid-template-columns:34px minmax(0,1fr); }
+      .award small { grid-column:2; }
+      .stats { flex-wrap:wrap; row-gap:14px; }
+      .stat { flex:0 0 50%; }
+      .stat:nth-child(3) { border-left:0; padding-left:0; }
+      .ad-grid { grid-template-columns:1fr; }
+      .kk-grid { grid-template-columns:1fr; }
+      .shorts-row { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .cat-no { font-size:44px; }
+      .lb-stage { padding:0 8px 16px; }
+    }
+
+    .pane-row { gap:14px; padding:14px; background:#f6f6f4; align-items:stretch; }
+    .pane-row figure { flex:1; min-width:0; display:flex; flex-direction:column; gap:8px; background:#fff; border:1px solid var(--line); border-radius:10px; padding:8px; margin:0; }
+    .pane-row .img-wrap { flex:1; min-height:0; }
+    .pane-row img { width:100%; height:100%; object-fit:contain; cursor:zoom-in; }
+    .pane-row figcaption { font-size:12px; font-weight:800; color:var(--ink); text-align:center; }
+    .pane-row figcaption.before { color:var(--mute); }
+    .pane-grid { gap:10px; padding:12px; background:#f6f6f4; overflow-y:auto; align-content:start; }
+    .pane-grid.active { display:grid; }
+    .pane-grid figure { margin:0; background:#fff; border-radius:8px; overflow:hidden; border:1px solid var(--line); }
+    .pane-grid img { width:100%; aspect-ratio:var(--thumb,16/9); object-fit:contain; cursor:zoom-in; }
+    .pane-video { background:#000; align-items:center; justify-content:center; }
+    .pane-video video { width:100%; height:100%; object-fit:contain; background:#000; }
+    @media (max-width:768px) { .pane-row { flex-direction:column; } .pane-row img { height:auto; max-height:60vh; } .pane-grid { grid-template-columns:repeat(2,1fr) !important; max-height:70vh; } .project-screen { aspect-ratio:auto !important; } .pane.active { min-height:240px; } }
+    .vcard.short .vthumb img { transform: scale(1.16); }
+    .screen-tabs.top { justify-content:flex-start; margin:0 0 16px; }
+    .gem-pane { flex-direction:column; height:auto; }
+    .gem-cmp { display:grid; grid-template-columns:minmax(0,1fr) 28px minmax(0,1.15fr); gap:6px; align-items:center; }
+    .gem-before { flex:0 0 64%; margin:0; position:relative; z-index:2; background:#fff; border:1px solid var(--line); border-radius:12px; padding:8px; box-shadow:0 8px 20px rgba(0,0,0,.06); }
+    .gem-before img { display:block; width:100%; height:190px; object-fit:cover; object-position:top; border-radius:6px; cursor:zoom-in; opacity:.9; }
+    .gem-before figcaption { margin-top:6px; text-align:center; font-size:12px; font-weight:800; color:var(--mute); }
+    .gem-beam { flex:1; align-self:stretch; margin-right:-40px; background:linear-gradient(90deg, rgba(242,106,27,.05), rgba(242,106,27,.26)); clip-path: polygon(0 14%, 100% 0, 100% 100%, 0 86%); }
+    .gem-after { grid-column:3; z-index:1; margin:0; position:relative; background:#fff; border:2px solid var(--or); border-radius:14px; padding:12px; box-shadow:0 18px 40px rgba(242,106,27,.16); }
+    .gem-after img { display:block; width:100%; height:300px; object-fit:cover; object-position:top; border-radius:6px; cursor:zoom-in; }
+    .gem-badge { position:absolute; top:-12px; left:14px; z-index:2; background:var(--or); color:#fff; font-size:12px; font-weight:900; padding:4px 11px; border-radius:999px; }
+    .gem-diff-head { display:flex; justify-content:space-between; align-items:center; margin:20px 0 10px; font-size:11.5px; font-weight:950; letter-spacing:2px; color:var(--ink); }
+    .gem-diff-head a { letter-spacing:0; font-size:12.5px; font-weight:800; color:var(--or-dark); }
+    .gem-diff { list-style:none; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+    .gem-diff li { display:flex; gap:8px; background:var(--or-soft); border-radius:10px; padding:11px 12px; font-size:13px; font-weight:800; color:#333; line-height:1.45; word-break:keep-all; }
+    .gem-diff li::before { content:"✓"; color:var(--or); font-weight:950; }
+    .sc-pane { flex-direction:column; height:auto; }
+    .sc-label { font-size:11.5px; font-weight:950; letter-spacing:2px; color:var(--ink); margin-bottom:10px; }
+    .sc-out { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px; align-items:start; }
+    .sc-out figure { margin:0; }
+    .sc-out img { width:100%; height:auto; aspect-ratio:var(--ar,1); object-fit:contain; border-radius:12px; border:1px solid var(--line); background:#fff; cursor:zoom-in; box-shadow:0 10px 22px rgba(0,0,0,.06); }
+    .sc-flow { display:grid; grid-template-columns:1.6fr 1fr; gap:18px; align-items:center; margin-top:18px; background:var(--soft); border:1px solid var(--line); border-radius:14px; padding:14px; }
+    .sc-flow-img img { width:100%; height:auto; border-radius:8px; background:#fff; border:1px solid var(--line); cursor:zoom-in; }
+    .sc-steps { list-style:none; counter-reset:s; display:grid; gap:9px; }
+    .sc-steps li { counter-increment:s; display:flex; gap:9px; align-items:flex-start; font-size:13px; font-weight:800; color:#333; line-height:1.4; }
+    .sc-steps li::before { content:counter(s); flex:none; width:20px; height:20px; border-radius:50%; background:var(--or); color:#fff; font-size:11px; font-weight:900; display:flex; align-items:center; justify-content:center; }
+    .flow-card { background:#fff; border:1px solid var(--line); border-radius:16px; padding:16px; box-shadow:0 18px 40px rgba(0,0,0,.07); }
+    .flow-card-head { font-size:11.5px; font-weight:950; letter-spacing:2px; color:var(--ink); margin-bottom:12px; }
+    .flow-card img { width:100%; height:auto; cursor:zoom-in; }
+    .zh-steps { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:22px; margin-bottom:22px; }
+    .zh-step { position:relative; margin:0; display:flex; flex-direction:column; background:#fff; border-radius:14px; padding:14px; border:1px solid var(--or-line); }
+    .zh-steps .zh-step:not(:last-child)::after { content:"→"; position:absolute; right:-18px; top:44%; color:var(--or); font-weight:950; font-size:16px; }
+    .zh-num { font-size:12px; font-weight:950; color:var(--or); }
+    .zh-step b { font-size:15px; font-weight:950; color:var(--ink); margin-top:2px; }
+    .zh-step span { font-size:12.5px; color:var(--sub); font-weight:700; line-height:1.45; margin:4px 0 10px; word-break:keep-all; }
+    .zh-img { flex:1; display:flex; align-items:flex-start; justify-content:center; background:var(--soft); border-radius:10px; padding:8px; min-height:200px; }
+    .zh-img img { max-width:100%; max-height:430px; width:auto; height:auto; object-fit:contain; cursor:zoom-in; }
+    .zh-step.wide .zh-img { min-height:0; }
+    .zh-step.wide .zh-img img { max-height:none; width:100%; }
+    @media (max-width:1180px) { .zh-steps { grid-template-columns:1fr 1fr; } .zh-steps .zh-step::after { display:none; } }
+    @media (max-width:768px) {
+      .gem-cmp { grid-template-columns:1fr; gap:14px; } .gem-beam { display:none; } .gem-before img { max-height:220px; }
+      .gem-diff { grid-template-columns:1fr; } .sc-flow { grid-template-columns:1fr; } .sc-out { grid-template-columns:repeat(2,1fr); }
+      .zh-steps { grid-template-columns:1fr; }
+    }
+    .gem-ba { display:grid; grid-template-columns:minmax(0,1fr) 28px minmax(0,1.15fr); gap:6px; align-items:stretch; margin-bottom:34px; }
+    .ba-col { border-radius:12px; padding:14px 16px; }
+    .ba-col.before { background:var(--soft); border:1px solid var(--line); }
+    .ba-col.after { background:var(--or-soft); border:1.5px solid var(--or-line); }
+    .ba-tag { display:inline-block; font-size:11px; font-weight:950; letter-spacing:1.5px; padding:3px 9px; border-radius:999px; margin-bottom:8px; background:#e9e9e6; color:#666; }
+    .ba-col.after .ba-tag { background:var(--or); color:#fff; }
+    .ba-col b { display:block; font-size:14.5px; font-weight:950; color:var(--ink); line-height:1.45; word-break:keep-all; margin-bottom:6px; }
+    .ba-col ul { list-style:none; display:grid; gap:4px; }
+    .ba-col li { font-size:12.5px; color:var(--sub); font-weight:700; line-height:1.45; word-break:keep-all; padding-left:12px; position:relative; }
+    .ba-col li::before { content:"·"; position:absolute; left:2px; font-weight:950; }
+    .ba-col.after li { color:#4a3b30; }
+    .ba-arrow { align-self:center; text-align:center; color:var(--or); font-weight:950; font-size:18px; }
+    .gem-open { display:inline-block; margin-top:14px; font-size:12.5px; font-weight:800; color:var(--or-dark); }
+    @media (max-width:768px) { .gem-ba { grid-template-columns:1fr; } .ba-arrow { transform:rotate(90deg); } }
+    .zh-mini-wrap { margin-top:44px; }
+    .zh-mini-title { font-size:12px; font-weight:900; letter-spacing:2px; color:var(--mute); margin-bottom:12px; }
+    .zh-mini { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px; }
+    .zh-mini figure { margin:0; }
+    .zh-mini .im { height:150px; background:#fafafa; border:1px solid var(--line); border-radius:10px; display:flex; align-items:center; justify-content:center; padding:6px; overflow:hidden; }
+    .zh-mini .im img { max-width:100%; max-height:100%; object-fit:contain; cursor:zoom-in; opacity:.9; }
+    .zh-mini figcaption { margin-top:6px; font-size:12px; font-weight:700; color:var(--mute); }
+    .zh-mini figcaption span { color:var(--or-dark); font-weight:900; margin-right:2px; }
+    .nr-vis { display:grid; grid-template-columns:minmax(0,1fr) 150px; gap:18px; align-items:start; }
+    .ut-card { display:block; padding:0; border:0; background:none; cursor:zoom-in; text-align:center; }
+    .ut-img { position:relative; display:block; }
+    .ut-img img { position:relative; z-index:1; width:100%; height:auto; border-radius:4px; background:#fff; box-shadow:0 12px 26px rgba(0,0,0,.14); transition:transform .2s; }
+    .ut-stack { position:absolute; inset:6px -6px -6px 6px; background:#fff; border-radius:4px; box-shadow:0 6px 16px rgba(0,0,0,.1); }
+    .ut-card:hover .ut-img img { transform:translateY(-4px); }
+    .ut-cap { display:block; margin-top:14px; font-size:12.5px; font-weight:800; color:var(--ink); word-break:keep-all; line-height:1.4; }
+    @media (max-width:768px) { .zh-mini { grid-template-columns:repeat(2,1fr); } .nr-vis { grid-template-columns:1fr; } .ut-card { max-width:200px; margin:0 auto; } }
+    .gem-left { grid-column:1 / span 2; display:flex; align-items:center; align-self:stretch; }
+    @media (max-width:768px) { .gem-left { grid-column:auto; } .gem-after { grid-column:auto; } }
+    .pw-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+    .pw-card { display:flex; flex-direction:column; border:1px solid var(--line); border-radius:16px; overflow:hidden; background:#fff; transition:transform .15s, box-shadow .15s; }
+    .pw-card:hover { transform:translateY(-3px); box-shadow:0 18px 34px rgba(0,0,0,.1); }
+    .pw-thumb { position:relative; aspect-ratio:16/9; background:#111; overflow:hidden; }
+    .pw-thumb img { width:100%; height:100%; object-fit:cover; color:transparent; }
+    .pw-thumb.ch { background:#fff; } .pw-thumb.ch img { object-position:left top; }
+    .pw-tag { position:absolute; left:14px; top:14px; background:var(--or); color:#fff; font-size:13px; font-weight:900; padding:6px 14px; border-radius:999px; box-shadow:0 6px 16px rgba(0,0,0,.18); }
+    .pw-body { padding:20px 22px 22px; }
+    .pw-body h4 { font-size:20px; font-weight:950; color:var(--ink); letter-spacing:-.5px; margin-bottom:6px; }
+    .pw-body p { font-size:14px; color:var(--sub); line-height:1.65; word-break:keep-all; margin-bottom:14px; }
+    .pw-body .list { margin-bottom:12px; }
+    .pw-tools { font-size:12.5px; color:var(--mute); font-weight:700; }
+    @media (max-width:768px) { .pw-grid { grid-template-columns:1fr; } }
+
+
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <a href="#about" class="side-logo">고서연 <i>포트폴리오</i></a>
+      <ul class="side-nav"><li><a href="#about" data-cat="about">About Me</a></li><li><a href="#c1" data-cat="c1"><span class="n">01</span>AI·데이터 활용 실습</a></li><li><a href="#c5" data-cat="c5"><span class="n">02</span>사용자 중심 AI 서비스</a></li><li><a href="#c3" data-cat="c3"><span class="n">03</span>생성형 AI 워크플로우</a></li><li><a href="#c4" data-cat="c4"><span class="n">04</span>영상 콘텐츠 제작</a></li><li><a href="#c6" data-cat="c6"><span class="n">05</span>기타 프로젝트</a></li></ul>
+    </aside>
+    <main class="main">
+      <section class="about" id="about" data-cat="about">
+        <div class="section-inner">
+          <div class="about-top"><div class="kicker">ABOUT ME</div>
+            <div class="hero">
+              <div class="hero-photo"><img src="assets/img/profile.webp" alt="고서연"/></div>
+              <div>
+                                <h1>고서연 <span>Ko Seo-yeon</span></h1>
+                                <p class="copy">미디어 현장에서 콘텐츠를 만들고 운영하며 실무에 대한 이해를 넓혔습니다.<br>현장에서 발견한 문제를 데이터와 AI 기술로 해결하는 기획자가 되고자 합니다.</p>
+              </div>
+            </div>
+
+          </div>
+            <dl class="facts">
+              <div class="fact"><dt>CONTACT</dt><dd><a href="mailto:chamomile4228@naver.com">chamomile4228@naver.com</a><br><a href="https://github.com/su4228-prog" target="_blank" rel="noopener">github.com/su4228-prog</a></dd></div>
+              <div class="fact"><dt>EDUCATION</dt><dd>건국대학교 신문방송학과 <small>학점 4.2 / 4.5</small></dd></div>
+              <div class="fact"><dt>CERTIFICATE</dt><dd>데이터분석준전문가 (ADsP)<small>한국데이터산업진흥원 · 2026.08</small></dd></div>
+            </dl>
+          <div class="block-title">Experience<span class="uline"></span></div>
+          <div class="exp-line"><div class="exp-item"><div class="when">2023.12 – 2024.09</div><b>EBS</b><span>교육비전프로젝트 · 프리랜서(작가)</span></div><div class="exp-item"><div class="when">2024.10 – 2025.04</div><b>MBC</b><span>정치팀 · 사원(조연출)</span></div><div class="exp-item"><div class="when">2025.04 – 2025.10</div><b>해커스</b><span>교재마케팅팀 · 사원</span></div><div class="exp-item"><div class="when">2025.12 – 2026.06</div><b>시사저널사</b><span>정치국제팀 · 인턴(PD)</span></div><div class="exp-item now"><div class="when">2026.07 – 2026.11 (수료 예정)</div><b>MBC 아카데미</b><span>생성형 AI 마스터 클래스</span></div></div>
+          <div class="about-bottom">
+            <div><div class="block-title">Awards<span class="uline"></span></div>
+              <div class="awards"><div class="award"><span class="ic">🏆</span><span><b>장관상</b> · <span>제20회 MTN 대학생 중소기업 광고 공모전</span></span><small>2020.11</small></div><div class="award"><span class="ic">🎖️</span><span><b>FINALIST</b> · <span>2021 서울영상광고제 YOUNG CREATIVE AWARDS</span></span><small>2022.01</small></div><div class="award"><span class="ic">🥇</span><span><b>최우수상</b> · <span>LINC+ 산학협력단 제1회 UCC 콘테스트</span></span><small>2020.11</small></div><div class="award"><span class="ic">🥉</span><span><b>동상</b> · <span>한국언론진흥재단 뉴스 읽기, 뉴스 일기 공모전</span></span><small>2020.03</small></div></div></div>
+            <div><div class="block-title">Skills &amp; Tools<span class="uline"></span></div>
+              <div class="skills">
+                <div class="skill"><h4>DEVELOPMENT</h4><div class="chips"><span class="chip pt">Python</span><span class="chip pt">FastAPI</span><span class="chip pt">React</span><span class="chip">JavaScript</span><span class="chip">HTML/CSS</span><span class="chip">Kakao API</span><span class="chip pt">Pandas</span><span class="chip pt">SQL</span><span class="chip">Git</span></div></div>
+                <div class="skill"><h4>AI &amp; AUTOMATION</h4><div class="chips"><span class="chip pt">ChatGPT</span><span class="chip pt">Claude API</span><span class="chip pt">n8n</span><span class="chip pt">Opal</span><span class="chip">Kling AI</span><span class="chip">Gemini</span><span class="chip">Grok</span><span class="chip">Whisk</span><span class="chip">Suno</span></div></div>
+                <div class="skill"><h4>MARKETING · DESIGN</h4><div class="chips"><span class="chip pt">Excel</span><span class="chip pt">GA4</span><span class="chip">Photoshop</span><span class="chip">Premiere Pro</span></div></div>
+                <div class="skill"><h4>COLLABORATION</h4><div class="chips"><span class="chip">Notion</span><span class="chip">Slack</span></div></div>
+              </div></div>
+          </div>
+        </div>
+      </section>
+      <section class="section" id="c1" data-cat="c1">
+        <div class="section-inner">
+          <div class="cat-head"><div class="cat-left"><div><h2><span class="cno">01</span> AI·데이터 활용 실습 콘텐츠</h2><p>Python과 AI로 실제 데이터를 분석하고, 결과를 누구나 이해할 수 있게 시각화합니다</p></div></div><div class="cat-tags"><span>Python 데이터 분석</span><span>데이터 시각화</span><span>AI 활용 사례</span></div></div>
+          
+          <div class="project" id="s-mso">
+            <div class="p-layout">
+              <div class="p-text">
+                <div class="p-meta">2026.09.28 – 10.11 · 개인 프로젝트</div>
+                <h3 class="p-title">MEDIA STRATEGY OS</h3>
+                <div class="p-sub">데이터 기반 AI 콘텐츠 전략 추천 플랫폼</div>
+                <div class="p-stack">Python · React · FastAPI · OpenAI API</div>
+                <p class="p-summary">네이버 검색 관심도·RACOI 온라인 반응·유튜브 성과를 통합해 <b>17개 방송 프로그램의 화제성 변화</b>를 분석하고, AI로 프로그램별 콘텐츠 전략을 제안하는 서비스입니다.</p>
+                <div class="stats"><div class="stat"><b>3개</b><span>플랫폼 데이터 통합</span></div><div class="stat"><b>17개</b><span>프로그램별 AI 전략</span></div><div class="stat"><b>90건</b><span>AI 결과 직접 검증</span></div></div><div class="label">맡은 역할</div><ul class="list "><li>3개 플랫폼 데이터 수집·통합과 시각화 대시보드 구현</li><li>주간 화제성 변화 비교, 유튜브 영상 유형별 운영 현황 분석</li><li>OpenAI API로 프로그램별 전략 생성, 결과 90건 직접 검증</li></ul><div class="actions"><a class="btn primary" href="https://github.com/su4228-prog/MEDIA_STRATEGY_OS" target="_blank" rel="noopener" >GitHub 보기 →</a><a class="btn" href="https://media-strategy-os.vercel.app/" target="_blank" rel="noopener" >사이트 이동하기</a></div>
+              </div>
+              <div class="project-visual"><div class="browser-frame"><div class="browser-top"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div><div class="project-screen" data-fit style="--ratio:2.13"><div class="pane active pane-img"><img src="assets/img/mso/main.webp" alt="MEDIA STRATEGY OS 메인 화면" data-zoom data-cap="MEDIA STRATEGY OS 메인 화면"  /></div><div class="pane pane-img"><img src="assets/img/mso/buzz.webp" alt="화제성 분석" data-zoom data-cap="화제성 분석" loading="lazy" /></div><div class="pane pane-img"><img src="assets/img/mso/report.webp" alt="분석 리포트" data-zoom data-cap="분석 리포트" loading="lazy" /></div><div class="pane pane-img"><img src="assets/img/mso/guide.webp" alt="플랫폼 안내" data-zoom data-cap="플랫폼 안내" loading="lazy" /></div></div></div><div class="screen-tabs"><button class="screen-tab active" data-pane="0">메인 화면</button><button class="screen-tab" data-pane="1">화제성 분석</button><button class="screen-tab" data-pane="2">분석 리포트</button><button class="screen-tab" data-pane="3">플랫폼 안내</button></div></div>
+            </div>
+          </div>
+          <div class="project" id="s-dongne">
+            <div class="p-layout">
+              <div class="p-text">
+                
+                <h3 class="p-title">동네픽</h3>
+                <div class="p-sub">데이터 기반 맞춤형 주거지역 추천 서비스</div>
+                <div class="p-stack">Python · Pandas · D3.js</div>
+                <p class="p-summary">서울 25개 자치구의 <b>7개 분야 공공데이터</b>를 통합해, 예산과 생활 성향에 맞는 동네 TOP 3를 추천하는 웹서비스입니다.</p>
+                <div class="stats"><div class="stat"><b>41.6만 건</b><span>전월세 거래 분석</span></div><div class="stat"><b>25개</b><span>자치구 비교</span></div><div class="stat"><b>TOP 3</b><span>맞춤 추천</span></div></div><div class="label">맡은 역할</div><ul class="list "><li>출처·단위가 다른 7개 분야 데이터(민원·주거·인구·상권·의료·교육·주차)를 자치구 단위로 통합</li><li>인구 보정·중앙값·정규화로 지역 간 공정한 비교 기준 설계</li><li>예산·생활 성향 가중치 기반 추천 알고리즘과 추천 근거 시각화</li></ul><div class="actions"><a class="btn primary" href="https://github.com/su4228-prog/0914_001" target="_blank" rel="noopener" >GitHub 보기 →</a><a class="btn" href="https://su4228-prog.github.io/0914_001/" target="_blank" rel="noopener" >사이트 이동하기</a></div>
+              </div>
+              <div class="project-visual"><div class="browser-frame"><div class="browser-top"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div><div class="project-screen" data-fit style="--ratio:1.7777777777777777"><div class="pane active pane-img"><img src="assets/img/dongne/main.webp" alt="동네픽 메인 화면" data-zoom data-cap="동네픽 메인 화면"  /></div><div class="pane pane-img"><img src="assets/img/dongne/result.webp" alt="추천 결과" data-zoom data-cap="추천 결과" loading="lazy" /></div><div class="pane pane-img"><img src="assets/img/dongne/about.webp" alt="데이터 기준 안내" data-zoom data-cap="데이터 기준 안내" loading="lazy" /></div></div></div><div class="screen-tabs"><button class="screen-tab active" data-pane="0">메인 화면</button><button class="screen-tab" data-pane="1">추천 결과</button><button class="screen-tab" data-pane="2">데이터 기준 안내</button></div></div>
+            </div>
+            <div class="wide-block"><div class="wide-head"><h3>동네픽 프로젝트 자료<span class="uline"></span></h3>
+              <div class="actions"><button class="btn primary" data-doc="dongnepick" data-page="1">전체 보기</button><a class="btn" href="assets/pdf/dongnepick.pdf" download>PDF 다운로드</a></div></div>
+              <div class="page-strip"><button class="page-btn" data-doc="dongnepick" data-page="1" aria-label="1페이지"><img src="assets/thumbs/dongnepick/p01.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="2" aria-label="2페이지"><img src="assets/thumbs/dongnepick/p02.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="3" aria-label="3페이지"><img src="assets/thumbs/dongnepick/p03.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="4" aria-label="4페이지"><img src="assets/thumbs/dongnepick/p04.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="5" aria-label="5페이지"><img src="assets/thumbs/dongnepick/p05.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="6" aria-label="6페이지"><img src="assets/thumbs/dongnepick/p06.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="7" aria-label="7페이지"><img src="assets/thumbs/dongnepick/p07.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="8" aria-label="8페이지"><img src="assets/thumbs/dongnepick/p08.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="9" aria-label="9페이지"><img src="assets/thumbs/dongnepick/p09.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="10" aria-label="10페이지"><img src="assets/thumbs/dongnepick/p10.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="11" aria-label="11페이지"><img src="assets/thumbs/dongnepick/p11.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="12" aria-label="12페이지"><img src="assets/thumbs/dongnepick/p12.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="13" aria-label="13페이지"><img src="assets/thumbs/dongnepick/p13.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="14" aria-label="14페이지"><img src="assets/thumbs/dongnepick/p14.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="15" aria-label="15페이지"><img src="assets/thumbs/dongnepick/p15.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="16" aria-label="16페이지"><img src="assets/thumbs/dongnepick/p16.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="17" aria-label="17페이지"><img src="assets/thumbs/dongnepick/p17.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="18" aria-label="18페이지"><img src="assets/thumbs/dongnepick/p18.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="19" aria-label="19페이지"><img src="assets/thumbs/dongnepick/p19.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="20" aria-label="20페이지"><img src="assets/thumbs/dongnepick/p20.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="21" aria-label="21페이지"><img src="assets/thumbs/dongnepick/p21.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="22" aria-label="22페이지"><img src="assets/thumbs/dongnepick/p22.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="23" aria-label="23페이지"><img src="assets/thumbs/dongnepick/p23.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="24" aria-label="24페이지"><img src="assets/thumbs/dongnepick/p24.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="25" aria-label="25페이지"><img src="assets/thumbs/dongnepick/p25.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="26" aria-label="26페이지"><img src="assets/thumbs/dongnepick/p26.webp" alt="" loading="lazy"/></button><button class="page-btn" data-doc="dongnepick" data-page="27" aria-label="27페이지"><img src="assets/thumbs/dongnepick/p27.webp" alt="" loading="lazy"/></button></div></div>
+          </div>
+        </div>
+      </section>
+      <section class="section" id="c5" data-cat="c5">
+        <div class="section-inner">
+          <div class="cat-head"><div class="cat-left"><div><h2><span class="cno">02</span> 사용자 중심 AI 서비스 기획</h2><p>사용자의 업무 흐름을 분석해 AI 서비스로 설계하고, 사용자 테스트로 효과를 검증합니다</p></div></div><div class="cat-tags"><span>사용자 요구 분석</span><span>사용자 테스트</span><span>피드백 반영</span></div></div>
+          
+          <div class="project" id="s-newsroom">
+            <div class="p-layout">
+              <div class="p-text">
+                <div class="p-meta">2026.09.17 – 11.11 · 팀 프로젝트</div>
+                <h3 class="p-title">동아일보 AI 기사 작성 프로그램</h3>
+                <div class="p-sub">기사 작성부터 송고까지 한 곳에서 하는 AI 뉴스룸</div>
+                <div class="p-stack">React · FastAPI · OpenAI API</div>
+                <p class="p-summary">취재부터 작성·교정·배포까지 기자 업무를 <b>하나의 프로그램 안에서</b> 진행할 수 있도록 한 AI 뉴스 제작 서비스입니다.</p>
+                <div class="stats"><div class="stat"><b>4.0/5.0</b><span>현업 기자 5명 평균 만족도</span></div><div class="stat"><b>60%</b><span>4점 이상 평가 비율</span></div><div class="stat"><b>21.9자</b><span>AI 부제 줄당 평균 글자 수</span></div></div><div class="label">주요 성과</div><ul class="list results"><li>동아일보 기사 46건 분석으로 AI 부제 생성 규칙 <em>10개</em> 도출, <em>4차례</em> 개선</li><li>AI 부제 줄당 평균 글자 수 28.5자 → <em>21.9자</em> — 실제 동아일보 평균 20.3자에 근접</li><li><b>현업 기자 5명 대상 사용자 테스트, 평균 만족도 <em>4.0/5.0점</em></b></li></ul><div class="label">맡은 역할</div><ul class="list "><li>현업 기자 대상 사용자 테스트 진행</li><li>기사 분석으로 AI 제목·부제 생성 기준 개선</li><li>동아 CMS를 참고한 사진 편집, 무료 사진 API 연동과 <b>출처 자동 표기</b></li></ul>
+              </div>
+              <div class="project-visual nr-vis"><div class="nr-main"><div><div class="browser-frame"><div class="browser-top"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div><div class="project-screen" data-fit style="--ratio:1.88"><div class="pane active pane-img"><img src="assets/img/newsroom/main.webp" alt="메인 화면" data-zoom data-cap="메인 화면"  /></div><div class="pane pane-img"><img src="assets/img/newsroom/write.webp" alt="기사 작성 화면" data-zoom data-cap="기사 작성 화면" loading="lazy" /></div><div class="pane pane-img"><img src="assets/img/newsroom/keyword.webp" alt="AI 키워드·사진 추천" data-zoom data-cap="AI 키워드·사진 추천" loading="lazy" /></div><div class="pane pane-img"><img src="assets/img/newsroom/photo.webp" alt="사진 편집" data-zoom data-cap="사진 편집" loading="lazy" /></div><div class="pane pane-img"><img src="assets/img/newsroom/preview.webp" alt="동아일보 미리보기" data-zoom data-cap="동아일보 미리보기" loading="lazy" /></div></div></div><div class="screen-tabs"><button class="screen-tab active" data-pane="0">메인 화면</button><button class="screen-tab" data-pane="1">기사 작성</button><button class="screen-tab" data-pane="2">AI 키워드·사진 추천</button><button class="screen-tab" data-pane="3">사진 편집</button><button class="screen-tab" data-pane="4">동아일보 미리보기</button></div></div></div><button class="ut-card" data-doc="newsroom_ut" data-page="1" aria-label="사용자 테스트 안내문 전체 보기"><span class="ut-img"><span class="ut-stack"></span><img src="assets/pages/newsroom_ut/p01.webp" alt="사용자 테스트 안내문"/></span><span class="ut-cap">사용자 테스트 안내·동의서</span></button></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="section" id="c3" data-cat="c3">
+        <div class="section-inner">
+          <div class="cat-head"><div class="cat-left"><div><h2><span class="cno">03</span> 생성형 AI 워크플로우 설계</h2><p>생성형 AI 활용 과정을 단계별로 구조화해, 누구나 따라 할 수 있는 흐름으로 만듭니다</p></div></div><div class="cat-tags"><span>프롬프트 설계</span><span>단계별 워크플로우</span><span>AI 도구 활용</span></div></div>
+          
+          <div class="project" id="s-opal">
+            <div class="p-layout">
+              <div class="p-text">
+                <div class="p-meta">AI 콘텐츠 자동화 · Google Opal</div>
+                <h3 class="p-title">AI 기반 비주얼 콘텐츠 제작 자동화</h3>
+                <div class="p-sub">Google Opal 워크플로우 3종 — 카드뉴스·제품 연출컷·스토리보드</div>
+                <div class="p-stack">Google Opal · Gemini · Nano Banana Pro</div>
+                <p class="p-summary">카드뉴스·제품 연출컷·드라마 스토리보드를 자동 생성하는 워크플로우를 만들어, <b>기획부터 이미지 제작까지 하나의 흐름</b>으로 연결했습니다.</p>
+                <div class="stats"><div class="stat"><b>3종</b><span>소재 제작 워크플로우</span></div><div class="stat"><b>5장</b><span>카드뉴스 자동 생성</span></div><div class="stat"><b>3컷</b><span>제품 사진 1장으로 연출컷</span></div></div><div class="label">맡은 역할</div><ul class="list "><li>주제·레퍼런스 분석 → 카피라이팅 → 카드뉴스 5장 제작 과정 자동화</li><li>제품 이미지 입력만으로 콘셉트가 다른 연출컷 3개를 만드는 워크플로우 구현</li><li>JSON 기반 프롬프트 구조화와 생성 단계 분리로 결과물 일관성 개선</li></ul><div class="actions"><a class="btn" href="https://opal.google/app/1tQEp9nvpOxVb74mjHcb2o0EECCoGf7wz" target="_blank" rel="noopener">카드뉴스 앱 ↗</a><a class="btn" href="https://opal.google/app/139iynC1r-Fb84s3ECLOSLisZ4OGmAp0k" target="_blank" rel="noopener">제품 연출컷 앱 ↗</a><a class="btn" href="https://opal.google/edit/1VndFogtES3Dxi1UqKzQZvqhDtKZgLPuT" target="_blank" rel="noopener">스토리보드 앱 ↗</a></div>
+              </div>
+              <div class="project-visual"><div class="pane sc-pane active" data-group><div class="sc-label">결과물</div><div class="sc-out" style="--ar:1/1"><figure><img src="assets/img/opal/cn_1.webp" alt="카드뉴스 결과물 1" data-zoom data-cap="카드뉴스 결과물 1" loading="lazy"/></figure><figure><img src="assets/img/opal/cn_2.webp" alt="카드뉴스 결과물 2" data-zoom data-cap="카드뉴스 결과물 2" loading="lazy"/></figure><figure><img src="assets/img/opal/cn_3.webp" alt="카드뉴스 결과물 3" data-zoom data-cap="카드뉴스 결과물 3" loading="lazy"/></figure><figure><img src="assets/img/opal/cn_4.webp" alt="카드뉴스 결과물 4" data-zoom data-cap="카드뉴스 결과물 4" loading="lazy"/></figure><figure><img src="assets/img/opal/cn_5.webp" alt="카드뉴스 결과물 5" data-zoom data-cap="카드뉴스 결과물 5" loading="lazy"/></figure></div><div class="sc-flow"><div class="sc-flow-img"><img src="assets/img/opal/cn_flow.webp" alt="카드뉴스 Opal 워크플로우" data-zoom data-cap="카드뉴스 Opal 워크플로우" loading="lazy"/></div><div><div class="sc-label">워크플로우</div><ol class="sc-steps"><li>주제·레퍼런스 입력</li><li>카피라이팅 문장 생성</li><li>카드별 프롬프트 생성 (JSON)</li><li>디자인 이미지 5장 생성</li></ol></div></div></div><div class="pane sc-pane" data-group><div class="sc-label">결과물</div><div class="sc-out" style="--ar:auto"><figure><img src="assets/img/opal/pc_out1.webp" alt="제품 연출컷 결과물 1" data-zoom data-cap="제품 연출컷 결과물 1" loading="lazy"/></figure><figure><img src="assets/img/opal/pc_out2.webp" alt="제품 연출컷 결과물 2" data-zoom data-cap="제품 연출컷 결과물 2" loading="lazy"/></figure></div><div class="sc-flow"><div class="sc-flow-img"><img src="assets/img/opal/pc_flow.webp" alt="제품 연출컷 Opal 워크플로우" data-zoom data-cap="제품 연출컷 Opal 워크플로우" loading="lazy"/></div><div><div class="sc-label">워크플로우</div><ol class="sc-steps"><li>제품 사진 업로드</li><li>연출 콘셉트 3종 프롬프트 (JSON)</li><li>연출컷 이미지 생성</li><li>갤러리로 결과 출력</li></ol></div></div></div><div class="pane sc-pane" data-group><div class="sc-label">결과물</div><div class="sc-out" style="--ar:auto"><figure><img src="assets/img/opal/sb_out1.webp" alt="드라마 스토리보드 결과물 1" data-zoom data-cap="드라마 스토리보드 결과물 1" loading="lazy"/></figure><figure><img src="assets/img/opal/sb_out2.webp" alt="드라마 스토리보드 결과물 2" data-zoom data-cap="드라마 스토리보드 결과물 2" loading="lazy"/></figure></div><div class="sc-flow"><div class="sc-flow-img"><img src="assets/img/opal/sb_flow.webp" alt="드라마 스토리보드 Opal 워크플로우" data-zoom data-cap="드라마 스토리보드 Opal 워크플로우" loading="lazy"/></div><div><div class="sc-label">워크플로우</div><ol class="sc-steps"><li>대본·등장인물 입력</li><li>인물 설정 정리 (JSON)</li><li>장면 프롬프트 + 스타일 지정</li><li>스토리보드 컷 생성</li></ol></div></div></div><div class="screen-tabs"><button class="screen-tab active" data-pane="0">카드뉴스</button><button class="screen-tab" data-pane="1">제품 연출컷</button><button class="screen-tab" data-pane="2">드라마 스토리보드</button></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="section" id="c4" data-cat="c4">
+        <div class="section-inner">
+          <div class="cat-head"><div class="cat-left"><div><h2><span class="cno">04</span> 영상 콘텐츠 제작</h2><p>어려운 주제를 쉽게 풀어내는 영상 콘텐츠를 기획·제작하고, 시청 데이터로 개선합니다</p></div></div><div class="cat-tags"><span>영상 기획·편집</span><span>스토리텔링</span><span>시청 데이터 분석</span></div></div>
+          <div class="project" id="s-imc"><div class="imc-top"><div><div class="p-meta">2020 – 2024 · 공모전 수상 · 지원사업</div><h3 class="p-title">광고 영상 기획·카피라이팅</h3><div class="p-sub">공모전 수상작 3편 · 지원사업 트레일러</div></div>
+      <div class="stats"><div class="stat"><b>3회</b><span>광고 공모전 수상</span></div><div class="stat"><b>장관상</b><span>중소벤처기업부</span></div><div class="stat"><b>50회</b><span>MTN TV 방영</span></div></div></div>
+      <div class="ad-grid"><a class="ad-card" href="https://youtu.be/bf_YTasRFLI" target="_blank" rel="noopener"><div class="ad-thumb"><img src="https://i.ytimg.com/vi/bf_YTasRFLI/maxresdefault.jpg" onload="if(this.naturalWidth&&this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://i.ytimg.com/vi/bf_YTasRFLI/hqdefault.jpg'}" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='https://i.ytimg.com/vi/bf_YTasRFLI/hqdefault.jpg'}" alt="" loading="lazy"/><span class="play">▶</span><div class="award-badge"><span class="medal">🏆</span><b>장관상</b></div></div><div class="ad-body"><div class="ad-contest">제20회 MTN 대학생 중소기업 광고 공모전</div><h4>휴먼셀바이오 15초 TV 광고</h4><div class="roles"><span>기획</span><span class=lite>카피라이팅</span></div><p>40·50세대 인터뷰를 바탕으로 면역세포 보관 기술을 은퇴 이후의 삶과 연결했습니다. MTN 머니투데이방송에서 50회 방영됐습니다.</p></div></a><a class="ad-card" href="https://youtu.be/EIPSutUTQ70" target="_blank" rel="noopener"><div class="ad-thumb"><img src="https://i.ytimg.com/vi/EIPSutUTQ70/maxresdefault.jpg" onload="if(this.naturalWidth&&this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://i.ytimg.com/vi/EIPSutUTQ70/hqdefault.jpg'}" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='https://i.ytimg.com/vi/EIPSutUTQ70/hqdefault.jpg'}" alt="" loading="lazy"/><span class="play">▶</span><div class="award-badge"><span class="medal">🎖️</span><b>FINALIST</b></div></div><div class="ad-body"><div class="ad-contest">2021 서울영상광고제 영크리에이티브어워즈</div><h4>희망브리지 기후 위기 광고</h4><div class="roles"><span>기획</span><span class=lite>카피라이팅</span></div><p>일상 장면을 기후 위기 상황과 연결해 문제의 심각성을 전달했고, 아이디어와 카피 전달력에서 호평을 받았습니다.</p></div></a><a class="ad-card" href="https://youtu.be/Slw2oQ_VWEM" target="_blank" rel="noopener"><div class="ad-thumb"><img src="https://i.ytimg.com/vi/Slw2oQ_VWEM/maxresdefault.jpg" onload="if(this.naturalWidth&&this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://i.ytimg.com/vi/Slw2oQ_VWEM/hqdefault.jpg'}" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='https://i.ytimg.com/vi/Slw2oQ_VWEM/hqdefault.jpg'}" alt="" loading="lazy"/><span class="play">▶</span><div class="award-badge"><span class="medal">🥇</span><b>최우수상</b></div></div><div class="ad-body"><div class="ad-contest">LINC+ 산학협력단 제1회 UCC 콘테스트</div><h4>LINC+ 산학협력단 홍보 영상</h4><div class="roles"><span>기획</span></div><p>취업·안전·창업·지역사회 4개 활동을 사칙연산에 빗대, 사업단의 역할을 쉽게 알렸습니다.</p></div></a><a class="ad-card" href="https://youtu.be/613j0flADhY" target="_blank" rel="noopener"><div class="ad-thumb"><img src="https://i.ytimg.com/vi/613j0flADhY/maxresdefault.jpg" onload="if(this.naturalWidth&&this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://i.ytimg.com/vi/613j0flADhY/hqdefault.jpg'}" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='https://i.ytimg.com/vi/613j0flADhY/hqdefault.jpg'}" alt="" loading="lazy"/><span class="play">▶</span><div class="award-badge"><span class="medal">✅</span><b>지원사업 선정</b></div></div><div class="ad-body"><div class="ad-contest">KOCCA 국제 공동제작 지원사업</div><h4>다큐프라임 〈화학〉 트레일러</h4><div class="roles"><span>대본 작성</span></div><p>지원사업 심사용 트레일러의 대본을 작성해 국제 공동제작 지원사업 선정에 기여했습니다.</p></div></a></div></div>
+          <div class="project" id="s-sisa">
+            <div class="p-layout">
+              <div class="p-text">
+                <div class="p-meta">2025.12.10 – 2026.06.09 · 경력</div>
+                <h3 class="p-title">시사저널TV</h3>
+                <div class="p-sub">정치 대담 &#x27;정품쇼&#x27; PD · 유튜브 채널 운영</div>
+                <div class="p-stack">Premiere Pro · Photoshop · OBS · 생성형 AI</div>
+                <p class="p-summary">6개월간 영상 <b>112편</b>을 기획·촬영·편집·송출해 <b>누적 조회수 798만 회</b>를 기록했습니다.</p>
+                <div class="stats"><div class="stat"><b>112편</b><span>영상 제작</span></div><div class="stat"><b>798만 회</b><span>누적 조회수</span></div><div class="stat"><b>22편</b><span>10만 회 이상 쇼츠</span></div></div><div class="stat-note">쇼츠 55편 652만 · 클립 46편 102만 · 라이브 11회 43.8만</div><div class="label">주요 성과</div><ul class="list results"><li>쇼츠 평균 조회수 <em>3.8배 증가</em> — 1월 6.1만 → 5월 22.9만 회</li><li>'몰아보기' 클립 포맷 기획 — 일반 클립보다 조회수 <em>1.9배</em></li><li>라이브 조회수 <em>3.1배 증가</em> — 첫 회 2만 → 최고 6.2만 회</li></ul><div class="label">맡은 역할</div><ul class="list "><li>정치·시사 현안 라이브 촬영·송출 운영 (11회)</li><li>핵심 장면을 고른 클립 제작과 몰아보기 포맷 기획</li><li>쇼츠 기획·편집·제목 구성, Photoshop·생성형 AI 썸네일 제작</li></ul>
+              </div>
+              <div class="project-visual"><div class="shorts-row" style="--n:4"><a class="vcard short" href="https://youtube.com/shorts/lheFBmKt92A" target="_blank" rel="noopener"><div class="vthumb"><img src="https://i.ytimg.com/vi/lheFBmKt92A/maxresdefault.jpg" onload="if(this.naturalWidth&&this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='assets/img/sisa/t1.webp'}" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='assets/img/sisa/t1.webp'}" alt="텃밭 반란에 속타는 정청래? &quot;김관영 이기면 연임 치명타&quot;" loading="lazy"/><span class="badge">조회수 1위</span><span class="len">0:45</span><span class="play">▶</span></div><div class="vbody"><p>텃밭 반란에 속타는 정청래? &quot;김관영 이기면 연임 치명타&quot;</p><small><strong>조회수 55.9만</strong> · 좋아요 1.2만</small></div></a><a class="vcard short" href="https://youtube.com/shorts/8T0zb0k9xJw" target="_blank" rel="noopener"><div class="vthumb"><img src="https://i.ytimg.com/vi/8T0zb0k9xJw/maxresdefault.jpg" onload="if(this.naturalWidth&&this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='assets/img/sisa/t2.webp'}" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='assets/img/sisa/t2.webp'}" alt="여론조사 1위한 하정우, 한동훈엔 위기가 아닌 이유?" loading="lazy"/><span class="len">0:44</span><span class="play">▶</span></div><div class="vbody"><p>여론조사 1위한 하정우, 한동훈엔 위기가 아닌 이유?</p><small><strong>조회수 49.1만</strong> · 좋아요 1.1만</small></div></a><a class="vcard short" href="https://youtube.com/shorts/cxMkAovU2oU" target="_blank" rel="noopener"><div class="vthumb"><img src="https://i.ytimg.com/vi/cxMkAovU2oU/maxresdefault.jpg" onload="if(this.naturalWidth&&this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='assets/img/sisa/t3.webp'}" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='assets/img/sisa/t3.webp'}" alt="이재명의 떠오른 골칫거리 김어준은 왜 지금 음모론을?" loading="lazy"/><span class="len">0:46</span><span class="play">▶</span></div><div class="vbody"><p>이재명의 떠오른 골칫거리 김어준은 왜 지금 음모론을?</p><small><strong>조회수 43.9만</strong> · 좋아요 8,188</small></div></a><a class="vcard short" href="https://youtube.com/shorts/DVChgF8b-2E" target="_blank" rel="noopener"><div class="vthumb"><img src="https://i.ytimg.com/vi/DVChgF8b-2E/maxresdefault.jpg" onload="if(this.naturalWidth&&this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='assets/img/sisa/t4.webp'}" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='assets/img/sisa/t4.webp'}" alt="한동훈은 왜 팬덤이 생겼나 &quot;보수 가뭄 속, 징계마저 서사&quot;" loading="lazy"/><span class="badge">좋아요 1위</span><span class="len">0:41</span><span class="play">▶</span></div><div class="vbody"><p>한동훈은 왜 팬덤이 생겼나 &quot;보수 가뭄 속, 징계마저 서사&quot;</p><small><strong>조회수 21.5만</strong> · 좋아요 1.3만</small></div></a></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="section" id="c6" data-cat="c6">
+        <div class="section-inner">
+          <div class="cat-head"><div class="cat-left"><div><h2><span class="cno">05</span> 기타 프로젝트</h2><p>직접 기획·운영한 예술 교양 채널과 생성형 AI로 만든 영상 작업입니다</p></div></div><div class="cat-tags"><span>예술 교양 쇼츠</span><span>AI 영상 제작</span></div></div>
+          <div class="project" id="s-personal"><div class="pw-grid"><a class="pw-card" href="https://www.youtube.com/@%EC%95%84%ED%8B%B0%EC%8A%A4%ED%8A%B8%ED%96%84%EC%8A%A4%ED%84%B0" target="_blank" rel="noopener"><div class="pw-thumb ch"><img src="assets/img/hamster_channel.webp" data-noplay alt=""/><span class="pw-tag">개인 유튜브 채널 운영</span></div><div class="pw-body"><h4>아티스트 햄스터</h4><p>미술 작품의 숨은 이야기를 반전·호기심 스토리텔링으로 풀어낸 예술·교양 쇼츠 채널을 기획·운영했습니다.</p><ul class="list results"><li>쇼츠 24편 제작 · 누적 조회수 <em>5.2만 회</em></li><li>영상당 평균 조회수 <em>7.1배</em> 증가 (416회 → 2,938회)</li><li>상위 5개 영상이 전체 조회수의 <em>66%</em> — 반전·호기심형에서 높은 성과</li></ul><div class="pw-tools">2024.07 – 2025.08 · YouTube 채널 보기 ↗</div></div></a><a class="pw-card" href="assets/video/firstlib.mp4" target="_blank" rel="noopener"><div class="pw-thumb"><img src="assets/img/firstlib/cuts/cut26.webp" alt=""/><span class="play">▶</span><span class="pw-tag">AI 영상 제작</span></div><div class="pw-body"><h4>첫서재: 잃어버린 기억들</h4><p>춘천의 공유 서재 &#x27;첫서재&#x27;를 모티브로, 실사 촬영 없이 생성형 AI만으로 판타지 애니메이션을 제작했습니다.</p><ul class="list results"><li><em>100%</em> 생성형 AI 기반 제작 — 이미지·영상·음성 모두 AI</li><li>장면 이미지 <em>32컷</em>, 캐릭터·배경 레퍼런스 시트 제작</li><li>참조 이미지·장면별 검증으로 캐릭터 일관성 <em>3단계</em> 개선</li></ul><div class="pw-tools">ChatGPT · Gemini · Kling · ElevenLabs</div></div></a></div></div>
+        </div>
+      </section>
+    </main>
+    <footer class="footer">© 2026 Ko Seo-yeon Portfolio</footer>
+  </div>
+
+  <script>
+    const DOCS = {"docuprime": {"n": 3, "title": "다큐프라임 〈화학〉 브로셔", "pdf": true}, "dongnepick": {"n": 27, "title": "동네픽 프로젝트 자료", "pdf": true}, "konkuk_map": {"n": 1, "title": "건국 타임즈 역사 안내판", "pdf": false}, "konkuk_report": {"n": 5, "title": "학교 주변 유물유적 안내판 제작 결과보고서", "pdf": true}, "kcolor": {"n": 32, "title": "Connecting K-Color 프로젝트 자료", "pdf": true}, "newsroom_ut": {"n": 5, "title": "AI-Newsroom OS 사용자 테스트 안내·동의서", "pdf": true}};
+    const navLinks = document.querySelectorAll(".side-nav a[data-cat]");
+    const sections = document.querySelectorAll("section[id]");
+    const setActiveNav = () => {
+      let current = "";
+      document.querySelectorAll("[data-cat]").forEach((s) => { if (s.tagName !== "A" && window.scrollY >= s.offsetTop - 200) current = s.dataset.cat; });
+      navLinks.forEach((l) => l.classList.toggle("active", l.dataset.cat === current));
+      const act = document.querySelector(".side-nav a.active");
+      if (act && window.innerWidth <= 1180) act.scrollIntoView({ block: "nearest", inline: "center" });
+    };
+    window.addEventListener("scroll", setActiveNav, { passive: true });
+    window.addEventListener("load", setActiveNav);
+
+    // 화면 탭 전환
+    document.querySelectorAll(".project-visual").forEach((visual) => {
+      const panes = visual.querySelectorAll(".pane");
+      const tabs = visual.querySelectorAll(".screen-tab");
+      tabs.forEach((tab) => tab.addEventListener("click", () => {
+        tabs.forEach((t) => t.classList.remove("active"));
+        tab.classList.add("active");
+        panes.forEach((p, i) => p.classList.toggle("active", String(i) === tab.dataset.pane));
+        visual.querySelectorAll("video").forEach((v) => v.pause());
+      }));
+    });
+
+    // 프레임 비율을 이미지 비율에 맞춤 (위아래·좌우 흰 여백 제거)
+    const fitScreen = (visual) => {
+      const scr = visual.querySelector(".project-screen[data-fit]"); if (!scr) return;
+      const pane = scr.querySelector(".pane.active");
+      const img = pane && pane.classList.contains("pane-img") ? pane.querySelector("img") : null;
+      if (!img) { scr.style.aspectRatio = ""; return; }
+      const set = () => { if (img.naturalWidth) scr.style.aspectRatio = img.naturalWidth + " / " + img.naturalHeight; };
+      if (img.complete && img.naturalWidth) set(); else img.addEventListener("load", set, { once: true });
+    };
+    document.querySelectorAll(".project-visual").forEach((v) => {
+      fitScreen(v);
+      v.querySelectorAll(".screen-tab").forEach((t) => t.addEventListener("click", () => fitScreen(v)));
+    });
+
+    // 라이트박스 (이미지 원본 크기로 보기)
+    const lb = document.createElement("div");
+    lb.className = "lb";
+    lb.innerHTML = '<div class="lb-top"><span class="lb-title"></span><div class="lb-btns"><a class="lb-btn lb-orig" target="_blank" rel="noopener">새 탭에서 열기</a><button class="lb-btn lb-close">닫기 ✕</button></div></div><div class="lb-stage"><button class="lb-nav lb-prev" aria-label="이전">‹</button><img alt=""/><button class="lb-nav lb-next" aria-label="다음">›</button></div><div class="lb-cap"></div>';
+    document.body.appendChild(lb);
+    let group = [], gi = 0;
+    const lbImg = lb.querySelector(".lb-stage img");
+    const showLb = () => {
+      const el = group[gi];
+      lbImg.src = el.currentSrc || el.src;
+      lb.querySelector(".lb-title").textContent = el.dataset.cap || el.alt || "";
+      lb.querySelector(".lb-cap").textContent = group.length > 1 ? (gi + 1) + " / " + group.length : "";
+      lb.querySelector(".lb-orig").href = el.src;
+      lb.querySelectorAll(".lb-nav").forEach((b) => (b.style.display = group.length > 1 ? "" : "none"));
+    };
+    const openLb = (el) => {
+      const pane = el.closest("[data-group], .pane") || el.parentElement;
+      group = [...pane.querySelectorAll("img[data-zoom]")];
+      gi = Math.max(0, group.indexOf(el));
+      showLb(); lb.classList.add("open"); document.body.classList.add("noscroll");
+    };
+    const closeLb = () => { lb.classList.remove("open"); document.body.classList.remove("noscroll"); };
+    lb.querySelector(".lb-close").onclick = closeLb;
+    lb.querySelector(".lb-prev").onclick = (e) => { e.stopPropagation(); gi = (gi - 1 + group.length) % group.length; showLb(); };
+    lb.querySelector(".lb-next").onclick = (e) => { e.stopPropagation(); gi = (gi + 1) % group.length; showLb(); };
+    lb.querySelector(".lb-stage").addEventListener("click", (e) => { if (e.target.classList.contains("lb-stage")) closeLb(); });
+
+    // 문서 뷰어 (브로셔·PDF 전체 페이지)
+    const dv = document.createElement("div");
+    dv.className = "lb";
+    dv.innerHTML = '<div class="lb-top"><span class="lb-title"></span><div class="lb-btns"><a class="lb-btn dv-pdf" target="_blank" rel="noopener">원본 PDF</a><button class="lb-btn dv-close">닫기 ✕</button></div></div><div class="dv-pages"></div>';
+    document.body.appendChild(dv);
+    const openDoc = (id, page) => {
+      const d = DOCS[id]; if (!d) return;
+      dv.querySelector(".lb-title").textContent = d.title + " · " + d.n + "페이지";
+      const pdf = dv.querySelector(".dv-pdf");
+      pdf.style.display = d.pdf ? "" : "none";
+      if (d.pdf) pdf.href = "assets/pdf/" + id + ".pdf";
+      const box = dv.querySelector(".dv-pages");
+      box.innerHTML = "";
+      for (let i = 1; i <= d.n; i++) {
+        const n = String(i).padStart(2, "0");
+        const img = document.createElement("img");
+        img.src = "assets/pages/" + id + "/p" + n + ".webp";
+        img.alt = d.title + " " + i + "페이지";
+        img.loading = Math.abs(i - page) <= 2 ? "eager" : "lazy";
+        img.id = "dvp-" + i;
+        const no = document.createElement("div"); no.className = "pno"; no.textContent = i + " / " + d.n;
+        box.appendChild(img); box.appendChild(no);
+      }
+      dv.classList.add("open"); document.body.classList.add("noscroll");
+      requestAnimationFrame(() => { const t = document.getElementById("dvp-" + page); if (t && page > 1) t.scrollIntoView(); else box.scrollTop = 0; });
+    };
+    const closeDoc = () => { dv.classList.remove("open"); document.body.classList.remove("noscroll"); };
+    dv.querySelector(".dv-close").onclick = closeDoc;
+    dv.querySelector(".dv-pages").addEventListener("click", (e) => { if (e.target.classList.contains("dv-pages")) closeDoc(); });
+
+    document.addEventListener("click", (e) => {
+      const d = e.target.closest("[data-doc]");
+      if (d) { e.preventDefault(); openDoc(d.dataset.doc, +d.dataset.page || 1); return; }
+      const z = e.target.closest("img[data-zoom]");
+      if (z) openLb(z);
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") { closeLb(); closeDoc(); }
+      if (lb.classList.contains("open") && group.length > 1) {
+        if (e.key === "ArrowLeft") lb.querySelector(".lb-prev").click();
+        if (e.key === "ArrowRight") lb.querySelector(".lb-next").click();
+      }
+      if (e.key === "Enter" && e.target.matches(".doc-cover")) e.target.click();
+    });
+  </script>
+
+</body>
+</html>
